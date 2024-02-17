@@ -36,4 +36,4 @@ def binary_search_helper(arr, target, low, high):
 
 
 # assert(binary_search_1([1, 2, 4, 6, 10], 1) == 0)
-assert(binary_search_2([1, 2, 4, 6, 10], 1) == 0)
+assert (binary_search_2([1, 2, 4, 6, 10], 1) == 0)
