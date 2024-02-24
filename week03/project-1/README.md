@@ -19,7 +19,7 @@ Part 1 - 25 points
 Part 2 - 25 points
 
 ```
-计算出持有基金的回报率：
+计算出持有基金的回报率：[assignment3.py](..%2F..%2F..%2F2023-spring-bootcamp%2Fweek04%2Fassignment3.py)
 
 1. 完成 export_result 方法，在其中会计算过去十年的年化收益率。
 2. 此方法同时会向data/QQQ-result.csv写入数据, 生成的数据应该跟QQQ-result-expected.csv一致。
