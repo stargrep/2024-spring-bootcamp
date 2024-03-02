@@ -1,0 +1,3 @@
+
+# https://nycdatascience.com/blog/python/data-analysis-on-the-effect-of-inflation-on-primary-assets/
+# https://www.google.com/search?q=python+data+mining+inflation+vs+housing+market&ei=QYxqZJ94wJ7k2g_lxq3wBw&ved=0ahUKEwjfnOzUrIf_AhVAD1kFHWVjC34Q4dUDCBE&uact=5&oq=python+data+mining+inflation+vs+housing+market&gs_lcp=Cgxnd3Mtd2l6LXNlcnAQAzIFCCEQoAEyBQghEKABMgUIIRCrAjoKCAAQRxDWBBCwAzoKCC4QigUQsAMQQzoKCAAQigUQsAMQQzoFCAAQgAQ6BQguEIAEOgYIABAWEB46CAgAEIoFEIYDOggIIRAWEB4QHToKCCEQFhAeEA8QHUoECEEYAFDUAljhZGCOZmgBcAF4AIABugGIAdsXkgEFMTMuMTWYAQCgAQHIAQrAAQE&sclient=gws-wiz-serp

@@ -15,19 +15,25 @@ def hello_world():
 def show_user_profile(name: str):
     names = name.split("_")
     if len(names) > 1:
-        return look_up_user_info(names[0], names[1])
-    return look_up_user_info(names[0])
+        return upsert_user_info(names[0], names[1])
+    return upsert_user_info(names[0])
 
 
 @app.route('/user', methods=['POST'])
 def login():
     name = request.json
+    """
+    sample name: {
+      "first_name" : mike,
+      "last_name" : wang
+    }
+    """
     if 'last_name' in name:
-        return look_up_user_info(name['first_name'], name['last_name'], method='POST')
-    return look_up_user_info(name['first_name'], method='POST')
+        return upsert_user_info(name['first_name'], name['last_name'], method='POST')
+    return upsert_user_info(name['first_name'], method='POST')
 
 
-def look_up_user_info(first_name: str, last_name: str = None, method: str = 'GET') -> str:
+def upsert_user_info(first_name: str, last_name: str = None, method: str = 'GET') -> str:
     # update or create
     if method == 'POST':
         if last_name is None:
