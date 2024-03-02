@@ -2,7 +2,8 @@
 
 我们选定QQQ作为一只美股大盘基金，每个周一进行定量买入，在这个项目我们要试验回测并且计算年化收益。
 
-注意 - 复制整个 week03/project-1 文件夹, 然后放在 week03/project-1-{name}, 这样每个人的代码不会冲突。
+注意 - 复制整个 week03/project-1 文件夹, 然后放在 week03/project-1-{name, lowercase no space}, 
+比如 week03/project-1-michael, 这样每个人的代码不会冲突。
 
 -------
 Part 1 - 25 points
@@ -20,8 +21,8 @@ Part 2 - 25 points
 ```
 计算出持有基金的回报率：
 
-1. 完成 export_result 方法，在其中调用过去十年的年化率。
-2. 此方法同时会向data/QQQ-result.csv, 生成的数据应该跟QQQ-result-expected.csv一致。
+1. 完成 export_result 方法，在其中会计算过去十年的年化收益率。
+2. 此方法同时会向data/QQQ-result.csv写入数据, 生成的数据应该跟QQQ-result-expected.csv一致。
 
 CODES 金融代码
 DATES 日期
@@ -34,11 +35,11 @@ PERCENTAGE 资产增幅百分比
 Part 3 - 25 points
 
 ```
-实现每周定资金买入：
+实现每周定资买入：
 
-1. 修改 calculate_scheduled_investment_fixed_cost 来返回新的逻辑，每周一花费1000购买。
+1. 修改 calculate_scheduled_investment_fixed_cost 来实现新的逻辑，每周一花费$1000购买QQQ。
 2. 实现 get_annual_return_fixed_cost，将计算数据写到QQQ-result-fixed-cost.csv
-3. 将结果跟QQQ-result-fixed-cost-expected.csv 比较，
+3. 将结果跟QQQ-result-fixed-cost-expected.csv 比较。
 
 ```
 
@@ -46,7 +47,8 @@ Part 4 - 25 points
 ```
 加入卖出规则：
 
-1. 卖出规则：我们会希望当投资总量翻倍的时候，卖出一部分基金(比如 25%)，来降低投资的风险并且可以稳定获利，修改算法来实现新的投资逻辑，比较新的回报率。
+1. 卖出规则：当投资总量翻倍的时候，卖出一部分基金(比如 25%)，来降低投资的风险并且可以稳定获利，修改算法来实现新的投资逻辑，比较新的回报率。
+注意卖出后的收益应该累计到资产中，方便计算年化收益率。
 2. 实现 calculate_scheduled_investment_fixed_cost_with_sell 和 get_annual_return_fixed_cost_with_sell
 3. 将结果跟QQQ-result-fixed-cost-sell-expected.csv 比较。
 

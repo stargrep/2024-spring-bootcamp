@@ -6,6 +6,8 @@ ANALYSIS_RESULT_DATA_NAME = "data/QQQ-result.csv"
 ANALYSIS_FIXED_RESULT_DATA_NAME = "data/QQQ-result-fixed-cost.csv"
 ANALYSIS_FIXED_SELL_RESULT_DATA_NAME = "data/QQQ-result-fixed-cost-sell.csv"
 
+""" DO NOT EDIT (BEGIN) """
+
 
 def read_data(file_name=RAW_DATA_NAME) -> pd.DataFrame:
     return pd.read_csv(file_name)
@@ -24,7 +26,12 @@ def annual_return(num_of_year: int, gain: float, inflation=0) -> float:
     return pow(gain - inflation, 1 / num_of_year) - 1.0
 
 
-def calculate_scheduled_investment(data: pd.DataFrame, shares: int = 10) -> ():
+""" DO NOT EDIT (END) """
+
+
+# -- TODO: Part 1 (START)
+def calculate_scheduled_investment(data: pd.DataFrame) -> ():
+    shares = 10
     positions = [0.0]
     cost = [0.0]
     assets = [0.0]
@@ -47,25 +54,33 @@ def calculate_scheduled_investment(data: pd.DataFrame, shares: int = 10) -> ():
             percentage.append(assets[i] / cost[i])
         else:
             percentage.append(0)
+    print(len(positions))
     return positions, cost, assets, percentage
 
 
+# -- TODO: Part 1 (END)
+
+
+# -- TODO: Part 2 (START)
 def export_result() -> float:
     # 生成 {first_name}_QQQ-result.csv, 目标是跟QQQ-result-expected.csv 一致
     # 在这里调用 calculate_scheduled_investment, 并且赋值
     # 到asset 和cost.
     # 最后返回十年的年化率
     df = read_data()
-    df['POSITIONS'], cost, assets, percentage = calculate_scheduled_investment(df)
-    df['COST'] = cost
-    df['ASSETS'] = assets
-    df['PERCENTAGE'] = percentage
+    df["POSITIONS"], cost, assets, percentage = calculate_scheduled_investment(df)
+    df["COST"] = cost
+    df["ASSETS"] = assets
+    df["PERCENTAGE"] = percentage
     write_data(df, ANALYSIS_RESULT_DATA_NAME)
     return annual_return(10, assets[-1] / cost[-1])  # 10 years
 
 
+# -- TODO: Part 2 (END)
+
+# -- TODO: Part 3 (START)
 # -- Recommend to copy and write to a new .csv file, so we will not mix Part 3 with Part 1 or 2
-def calculate_scheduled_investment_fixed_cost(data: pd.DataFrame, fixed_cost: float = 1000) -> ():
+def calculate_scheduled_investment_fixed_cost(data: pd.DataFrame, fixed_cost: float = 1000.0) -> ():
     positions = [0.0]
     cost = [0.0]
     assets = [0.0]
@@ -102,6 +117,10 @@ def get_annual_return_fixed_cost() -> float:
     return annual_return(10, assets[-1] / cost[-1])  # 10 years
 
 
+# -- TODO: Part 3 (END)
+
+
+# -- TODO: Part 4 (START)
 def calculate_scheduled_investment_fixed_cost_with_sell(data: pd.DataFrame,
                                                         fixed_cost: float = 1000,
                                                         sell_multiply: float = 2.0,
@@ -125,6 +144,7 @@ def calculate_scheduled_investment_fixed_cost_with_sell(data: pd.DataFrame,
     for i in range(1, len(data)):
         open_price = data.iloc[i]['OPEN']
         date = data.iloc[i]['DATES']
+        # sell logic
         if assets[i - 1] >= min_asset and days >= min_days and assets[i - 1] >= sell_multiply * cost[i - 1]:
             # sell
             sell_share = int(positions[i - 1] * sell_percentage)
@@ -141,6 +161,7 @@ def calculate_scheduled_investment_fixed_cost_with_sell(data: pd.DataFrame,
         else:
             days += 1
 
+        # buy logic
         if is_monday(date):
             shares = fixed_cost // open_price
             positions.append(positions[-1] + shares)
@@ -166,7 +187,12 @@ def get_annual_return_fixed_cost_with_sell() -> float:
     return annual_return(10, assets[-1] / cost[-1])  # 10 years
 
 
+# -- TODO: Part 4 (END)
+
+
+# -- TODO: Part 5 (Bonus)
 def print_all_annual_returns() -> (float, float, float):
+    # implement - this can simply call the three investment calculation, where they will write three files.
     print("Investment Return 1: ", round(export_result(), 4) * 100, "%")
     print("Investment Return 2: ", round(get_annual_return_fixed_cost(), 4) * 100, "%")
     print("Investment Return 3: ", round(get_annual_return_fixed_cost_with_sell(), 4) * 100, "%")
@@ -188,6 +214,9 @@ def print_inflation_adjust_annual_returns() -> (float, float, float):
     print("Adjusted Investment Return 1: ", round(return1, 4) * 100, "%")
     print("Adjusted Investment Return 2: ", round(return2, 4) * 100, "%")
     print("Adjusted Investment Return 3: ", round(return3, 4) * 100, "%")
+
+
+# -- TODO: Part 5 (END)
 
 
 if __name__ == '__main__':
