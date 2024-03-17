@@ -1,9 +1,13 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask import request
 from flask import json
 from calculation_service import write_data_for_symbol, get_annual_return_fixed_cost, annual_return
+import pandas as pd
+#df = pd.read_json("server/client_rate.json")
 
 
+
+#%%
 app = Flask(__name__)
 
 
@@ -46,8 +50,10 @@ def get_client_rate(client_id):
     :param client_id: str
     :return: http response
     """
+    df = get_client_rates()
+    real_rate = df[client_id]
     # How to get the actual rate from client_id?
-    return client_id
+    return real_rate
 
 
 # -- TODO END: Part 1
@@ -61,12 +67,16 @@ def upsert_client_rate():
 
     :return: http response.
     """
-    # We want to update if the client exist in the client_rate.json data
-    # Or insert a new client-rate pair into client_rate.json data
-    print(request)
+    data = request.get_json()  # 获取 POST 请求中的 JSON 数据
+    client_id = data.get('client_id')
+    rate = data.get('rate')
 
-    # After getting post request - how to update json file?
-    return request.get_json()
+    if client_id is None or rate is None:
+        return jsonify({'error': 'Client ID or Rate is missing'}), 400
+
+    update_client_rates(client_id, rate)  # 更新客户端利率数据
+
+    return jsonify({'message': 'Client rate updated successfully'}), 200
 
 
 def update_client_rates(client_id, rate):
@@ -77,10 +87,16 @@ def update_client_rates(client_id, rate):
     :param rate: float, e.g. 0.1
     :return:
     """
-    # check if exist
-    # replace or add client rate
-    # re-write the file
-    pass
+    # 读取原始数据
+    with open("client_rate.json", "r") as file:
+        client_rates = json.load(file)
+
+    # 更新或插入数据
+    client_rates[client_id] = {'rate': rate}
+
+    # 写入更新后的数据
+    with open("client_rate.json", "w") as file:
+        json.dump(client_rates, file, indent=4)
 
 
 # -- TODO END: Part 4
@@ -91,6 +107,22 @@ def update_client_rates(client_id, rate):
 @app.route("/calculate_return/<symbol>", methods=['GET'])
 def calculate_return(symbol):
     # FIXME - Hint, use try-except and look at the import calculation_service in the file.
+    def calculate_return(symbol):
+    """
+    Calculate annual return for the given symbol in the past 5 years.
+
+    :param symbol: str, the symbol of the stock or asset
+    :return: str, message indicating the annual return
+    """
+    try:
+        # 调用计算服务来计算给定符号的年回报率
+        annual_return = calculate_annual_return(symbol)
+
+        # 返回计算结果消息
+        return f"{symbol}'s Annual Return in the past 5 years is {annual_return}"
+    except Exception as e:
+        # 如果发生异常（比如找不到符号），返回错误消息
+        return "Not able to calculate, likely a wrong symbol name"
     pass
 
 
