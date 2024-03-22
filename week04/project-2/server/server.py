@@ -1,6 +1,6 @@
+import pandas as pd
 from flask import Flask
 from flask import request
-from flask import json
 from calculation_service import write_data_for_symbol, get_annual_return_fixed_cost, annual_return
 
 
@@ -16,7 +16,7 @@ def default():
 
     :return: str
     """
-    return "PROJECT 3 - we have " + str(len(get_client_rates())) + " clients in total."
+    return "FIRST PROJECT - we have " + str(len(get_client_rates())) + " clients in total."
 
 
 # sample data load function
@@ -47,7 +47,10 @@ def get_client_rate(client_id):
     :return: http response
     """
     # How to get the actual rate from client_id?
-    return client_id
+    rates = get_client_rates()
+    if client_id in rates:
+        return str(rates[client_id]['rate'])
+    return '0'
 
 
 # -- TODO END: Part 1
@@ -63,10 +66,16 @@ def upsert_client_rate():
     """
     # We want to update if the client exist in the client_rate.json data
     # Or insert a new client-rate pair into client_rate.json data
-    print(request)
+    param = request.get_json()
+    client_id = param['client_id']
+    rate = param['rate']
 
-    # After getting post request - how to update json file?
+    rates = get_client_rates()
+    rates[client_id] = {'rate': rate}
+    df = pd.DataFrame.from_dict(rates)
+    df.to_json("client_rate.json")
     return request.get_json()
+
 
 
 def update_client_rates(client_id, rate):
@@ -91,7 +100,12 @@ def update_client_rates(client_id, rate):
 @app.route("/calculate_return/<symbol>", methods=['GET'])
 def calculate_return(symbol):
     # FIXME - Hint, use try-except and look at the import calculation_service in the file.
-    pass
+    try:
+        write_data_for_symbol(symbol)
+        asset, cost = get_annual_return_fixed_cost()
+        return annual_return(symbol, asset, cost)
+    except:
+        return "Not able to calculate, likely a wrong symbol name"
 
 
 # -- TODO END: Part 7
