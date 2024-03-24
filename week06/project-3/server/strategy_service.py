@@ -1,13 +1,19 @@
 import pandas as pd
 import datetime as dt
+from database_service import *
 
 OPEN = 'open_price'
 DATE = 'trade_date'
 
 
 def read_data_from_db(symbol: str, start: str, end: str) -> pd.DataFrame:
+    return execute_read_df(f"SELECT * FROM stock_price WHERE symbol = '{symbol}' AND"
+                           f"trade_date >= '{start}' AND trade_date <= '{end}'"
+                           f"ORDER BY trade_date")
+
+
     # TODO [4] - Implement read data from stock price db using start date, end date and symbol
-    return None
+
 
 
 def write_data(symbol: str,
@@ -16,9 +22,16 @@ def write_data(symbol: str,
                annual: float,
                asset: float,
                cost: float) -> None:
+    try:
+        execute_write(f"INSERT INTO strategy_return VALUES('strategy1', '{start}', '{end}'"
+                      f",{annual},{asset},{cost},'{symbol}')")
+        print(f"write data for {symbol} using strategy1")
+    except Exception as e:
+        print(e)
+
     # TODO [5] - Implement insert a new result to strategy_return for given symbol.
     # If you have more time, you can add a new field for max_withdraw and sharpe_ratio to catch risk
-    return None
+
 
 
 def is_monday(day: str) -> bool:
@@ -64,5 +77,5 @@ def get_annual_return_fixed_cost(symbol: str, start: str, end: str) -> ():
     asset = assets[-1]
     cost = costs[-1]
     annual_return = get_annual_return(asset, cost)
-    write_data(symbol, start, end)
+    # write_data(symbol, start, end)
     return asset, cost, annual_return

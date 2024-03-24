@@ -62,6 +62,11 @@ def update_client_rates(client_id, rate):
     :param rate: float, e.g. 0.1
     :return: None
     """
+    res = execute_read(f"SELECT rate FROM client_rates WHERE client_id = '{client_id}'")
+    if res is None or len(res) == 0:
+        execute_write(f"INSERT INTO client_rates VALUES(NULL, '{client_id}', {rate})")
+    else:
+        execute_write(f"UPDATE client_rates SET rate = {rate} WHERE client_id = '{client_id}'")
     # TODO: [2] Implement Insert or Update function for a given client_id and rate. If exists, update, else, insert.
 
 
@@ -69,7 +74,7 @@ def update_client_rates(client_id, rate):
 def trigger_pricing_etl(symbol):
     update_records = update_pricing_data(symbol)
     if update_records >= 0:
-        return f"Updated {update_pricing_data(symbol)} Records for {symbol}."
+        return f"Updated {update_records} Records for {symbol}."
     else:
         return f"ETL Update failed for {symbol}"
 
