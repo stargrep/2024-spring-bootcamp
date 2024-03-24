@@ -22,7 +22,8 @@ def upsert_client_rate(client_id, rate):
 # -----------------------Here are tests for API ------------------------
 def test_get_rate():
     response = get_rate('client1')
-    assert float(response) == 0.2
+    assert float(response) == 0.1
+    assert float(get_rate('client-1')) == 0
 
 
 def test_post_rate():
